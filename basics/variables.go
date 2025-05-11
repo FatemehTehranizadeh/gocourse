@@ -16,5 +16,8 @@ func main() {
 	const MAX = 6
 	fmt.Println(MAX)
 
+	const MIN = 1
+	fmt.Println((MIN))
+
 
 }
