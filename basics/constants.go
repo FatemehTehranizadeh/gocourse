@@ -15,5 +15,7 @@ func main() {
 		wednesday int = 3
 	)
 	fmt.Println("Monday is the",monday,"day of the week")
+	// For constants, the type should be identified as const
+	// We have typed or untyped constants
 
 }
