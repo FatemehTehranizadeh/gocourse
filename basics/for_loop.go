@@ -2,8 +2,7 @@ package main
 
 import "fmt"
 
-
-func main(){
+func main() {
 
 	// //Simple iteration over a range
 	// for i := 1; i<=5; i++ {
@@ -26,7 +25,7 @@ func main(){
 	// 	if i == 8 {
 	// 		break
 	// 	}
-		
+
 	// }
 
 	// rows := 5
@@ -40,7 +39,7 @@ func main(){
 	// 		fmt.Print(("*"))
 	// 	}
 	// 	fmt.Printf("\n") //Move to next line or use fmt.Println()
-		
+
 	// }
 	// for i :=rows-1; i>0; i-- {
 	// 	// inner loop for spaces before starts
@@ -51,7 +50,7 @@ func main(){
 	// 		fmt.Print(("*"))
 	// 	}
 	// 	fmt.Printf("\n") //Move to next line or use fmt.Println()
-		
+
 	// }
 
 	// for i :=rows; i>0; i-- {
@@ -63,7 +62,7 @@ func main(){
 	// 		fmt.Print(("*"))
 	// 	}
 	// 	fmt.Printf("\n") //Move to next line or use fmt.Println()
-		
+
 	// }
 
 	// for i:=2; i<=rows; i++ {
@@ -75,15 +74,11 @@ func main(){
 	// 		fmt.Print(("*"))
 	// 	}
 	// 	fmt.Printf("\n") //Move to next line or use fmt.Println()
-		
+
 	// }
 
-	for i:= range 8 {
+	for i := range 8 {
 		fmt.Println(i)
 	}
-
-	 
-
-
 
 }
