@@ -53,9 +53,6 @@ func main(){
 
 	//Functions are a first class citizens
 	
-
-
-
 }
 
 func add(a,b int) int {

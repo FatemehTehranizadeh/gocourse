@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 
-func main(){
+func main() {
 	//Range keyword uses for iterating over data structures like arrays
 	//Iterating over channels is common
 	//Iterating over strings
