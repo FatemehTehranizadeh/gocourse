@@ -40,6 +40,7 @@ func (rl *rateLimiter) allow() bool {
 func main() {
 
 	rl := newRateLimiter(2, 2*time.Second)
+	var wg sync.WaitGroup
 
 	var requests map[int]string
 	requests = make(map[int]string)
@@ -50,12 +51,18 @@ func main() {
 
 
 	for k, _ := range requests {
-		if rl.allow() {
-			fmt.Println("Request allowed: ", requests[k])
-			delete(requests, k)
-		} else {
-			fmt.Println("Request denied: ", requests[k])
-		}
+		wg.Add(1)
+		go func() {
+			if rl.allow() {
+				fmt.Println("Request allowed: ", requests[k])
+				delete(requests, k)
+			} else {
+				fmt.Println("Request denied: ", requests[k])
+			}
+			wg.Done()
+		}()
 		time.Sleep(time.Millisecond * 500)
 	}
+	wg.Wait()
+	fmt.Println("Finish")
 }
