@@ -28,15 +28,20 @@ func (lb *leakyBucket) allow() bool {
 	defer lb.mu.Unlock()
 	now := time.Now()
 	elapsedTime := now.Sub(lb.lastLeak)
-	tokensToAdd := int(elapsedTime / lb.leakRate) //We want to determine if we can accept new tokens or not, for example if we accept
+	// tokensToAdd := int(elapsedTime / lb.leakRate) //We want to determine if we can accept new tokens or not, for example if we accept
 	//new requests every 500 ms, if 200 ms has been passed, we can't add new tokens.
-	lb.tokens += tokensToAdd
+	// lb.tokens += tokensToAdd
+	// lb.lastLeak = lb.lastLeak.Add(time.Duration(tokensToAdd) * lb.leakRate) //We should add time according to new tokens we add and the time they consumed
+
+	if elapsedTime >= lb.leakRate {
+		lb.tokens += 1
+	}
 
 	if lb.tokens > lb.capacity {
 		lb.tokens = lb.capacity
 	}
 
-	lb.lastLeak = lb.lastLeak.Add(time.Duration(tokensToAdd) * lb.leakRate) //We should add time according to new tokens we add and the time they consumed
+	lb.lastLeak = lb.lastLeak.Add(time.Duration(lb.leakRate))
 
 	// fmt.Printf("Tokens added %d, Tokens subtracted %d, Total tokens: %d\n", tokensToAdd, 1, lb.tokens)
 	// fmt.Printf("Last leak time: %v\n", lb.lastLeak)
@@ -51,7 +56,7 @@ func (lb *leakyBucket) allow() bool {
 
 func main() {
 	fmt.Println("Start")
-	lb := newLeakyBucket(10, time.Millisecond*500)
+	lb := newLeakyBucket(3, time.Millisecond*500)
 
 	var wg sync.WaitGroup
 	var requests map[int]string
@@ -62,7 +67,7 @@ func main() {
 		requests[i] = fmt.Sprintf("The %dth request", i)
 	}
 
-	for i := 0; i <= requestsLength/2; i++ {
+	for i := 1; i <= requestsLength/2; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
@@ -78,19 +83,19 @@ func main() {
 
 	time.Sleep(time.Millisecond * 800)
 
-	for i := 11; i <= requestsLength; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			if lb.allow() {
-				fmt.Println("Request allowed: ", requests[i])
-				delete(requests, i)
-			} else {
-				fmt.Println("Request denied: ", requests[i])
-			}
-			time.Sleep(time.Millisecond * 200)
-		}()
-	}
+	// for i := 11; i <= requestsLength; i++ {
+	// 	wg.Add(1)
+	// 	go func() {
+	// 		defer wg.Done()
+	// 		if lb.allow() {
+	// 			fmt.Println("Request allowed: ", requests[i])
+	// 			delete(requests, i)
+	// 		} else {
+	// 			fmt.Println("Request denied: ", requests[i])
+	// 		}
+	// 		time.Sleep(time.Millisecond * 200)
+	// 	}()
+	// }
 	wg.Wait()
 
 }
